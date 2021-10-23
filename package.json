@@ -7,7 +7,6 @@
     "build": "tsc",
     "test": "cross-env NODE_ENV=test mocha -r ts-node/register test/**/*.ts",
     "test:cover": "nyc --reporter=html npm test",
-    "test:example": "tsc && node ./examples/app",
     "lint": "eslint ."
   },
   "repository": {
