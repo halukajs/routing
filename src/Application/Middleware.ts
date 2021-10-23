@@ -9,6 +9,7 @@ import { MiddlewareOptions } from '../Routing/RoutingEssentials'
 
 export default class Middleware {
     
+    /* istanbul ignore next */
 	public handle (_opts: MiddlewareOptions) {
 		throw new TypeError('Middleware handler not implemented.')
 	}

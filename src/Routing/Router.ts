@@ -77,6 +77,7 @@ export default class Router {
 			if (route == undefined) throw new Error(`Route file needs to export a valid Router. '${typeof(route)}' exported.`)
 			this.#routes.getRoutes().push(...route.#routes.getRoutes().map(x => this.mergeGroupAttributes(x)))
 		}else {
+			this.#groupStack.pop()
 			throw new TypeError('Invalid Group Action provided. Exprected "string" or "function".')
 		}
 	}
