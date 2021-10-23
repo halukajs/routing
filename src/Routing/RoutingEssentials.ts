@@ -1,29 +1,29 @@
 'use strict'
 
-import Middleware from "../Application/Middleware"
+import Middleware from '../Application/Middleware'
 
-export type METHOD = "GET" | "POST" | "PUT" | "PATCH" | "DELETE" | "OPTIONS"
+export type METHOD = 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE' | 'OPTIONS'
 
-export type Action = Function | string | null
+export type Action = CallableFunction | string | null
 
 // Path to grab route files from
 export interface RouterOptions {
 	path: string
 }
 
-export type MiddlewareType = Middleware | Function | string
+export type MiddlewareType = Middleware | CallableFunction | string
 
 export interface RouteAttributes {
 
     prefix?: string,
     name?: string,
-    where?: Object,
+    where?: KeyValue,
 
 }
 
 export interface IRouterDispatcher {
     create (): any
-    dispatch (app: any): any
+    dispatch (_app: any): any
 
 }
 
@@ -34,4 +34,4 @@ export interface DispatcherOptions {
 
 export type MiddlewareOptions = any
 
-// controller interface
+export type KeyValue = { [key: string]: string }

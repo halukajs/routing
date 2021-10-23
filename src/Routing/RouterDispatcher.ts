@@ -5,9 +5,9 @@
  * @author Robin Panta <hacktivistic@gmail.com>
  */
 
-import CompiledRoute from './CompiledRoute';
-import Router from './Router';
-import { DispatcherOptions } from './RoutingEssentials';
+import CompiledRoute from './CompiledRoute'
+import Router from './Router'
+import { DispatcherOptions } from './RoutingEssentials'
 
 
 export default class RouterDispatcher<T> {
@@ -21,24 +21,24 @@ export default class RouterDispatcher<T> {
 
 	*load () {
 		for (const route of this.router.routes) { 
-            yield CompiledRoute.FromRoute(route, this.options)
+			yield CompiledRoute.FromRoute(route, this.options)
 		}
-    }
+	}
 
-     /* istanbul ignore next */
-    create (): T {
-        throw new TypeError('create() not implemented.')
-    }
+	/* istanbul ignore next */
+	create (): T {
+		throw new TypeError('create() not implemented.')
+	}
 
-     /* istanbul ignore next */     
-    dispatch (instance: T): T {
-        throw new TypeError('dispatch() not implemented.')
-    }
+	/* istanbul ignore next */     
+	dispatch (_instance: T): T {
+		throw new TypeError('dispatch() not implemented.')
+	}
     
-     /* istanbul ignore next */ 
-    createAndDispatch (): T {
-        let app = this.create()
-        return this.dispatch(app)
-    }
+	/* istanbul ignore next */ 
+	createAndDispatch (): T {
+		const app = this.create()
+		return this.dispatch(app)
+	}
 }
 

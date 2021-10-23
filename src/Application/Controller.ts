@@ -6,15 +6,11 @@
  */
 
 export default class Controller {
-
-    constructor () {
-
-    }
     
-    public middlewares: Array<string | Function> = []
+	public middlewares: Array<string | CallableFunction> = []
 
-    public middleware(middleware: string | Function) {
-        this.middlewares.push(middleware)
-    }
+	public middleware(middleware: string | CallableFunction) {
+		this.middlewares.push(middleware)
+	}
 
 }

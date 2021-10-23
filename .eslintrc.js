@@ -3,11 +3,18 @@ module.exports = {
 		'es6': true,
 		'node': true
 	},
-	'extends': 'eslint:recommended',
+	'parser': '@typescript-eslint/parser',
+	'extends': [
+		'eslint:recommended',
+		'plugin:@typescript-eslint/recommended'
+	],
 	'globals': {
 		'Atomics': 'readonly',
 		'SharedArrayBuffer': 'readonly'
 	},
+	'plugins': [
+		'@typescript-eslint',
+	],
 	'parserOptions': {
 		'ecmaVersion': 2018
 	},
@@ -27,9 +34,11 @@ module.exports = {
 		'semi': [
 			'error',
 			'never'
-		]
+		],
+		'no-unused-vars': ['error', { 'argsIgnorePattern': '^_' }]
 	},
 	'ignorePatterns': [
-		'test/*'
+		'test/*',
+		'build/*'
 	]
 }

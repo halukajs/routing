@@ -1,6 +1,6 @@
 'use strict'
 
-import { MiddlewareOptions } from "../Routing/RoutingEssentials";
+import { MiddlewareOptions } from '../Routing/RoutingEssentials'
 
 /**
  * @name Middleware
@@ -9,8 +9,8 @@ import { MiddlewareOptions } from "../Routing/RoutingEssentials";
 
 export default class Middleware {
     
-    public handle (opts: MiddlewareOptions) {
-        throw new TypeError('Middleware handler not implemented.')
-    }
+	public handle (_opts: MiddlewareOptions) {
+		throw new TypeError('Middleware handler not implemented.')
+	}
 
 }
