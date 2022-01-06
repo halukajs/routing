@@ -55,6 +55,7 @@ describe("Routing", () => {
         
                 expect(s.getRouteByName('route')).to.eql(undefined)
                 expect(s.getRouteByName('oppai.route2')).to.eql(ro)
+                expect(s.getRouteByName('oppai.route2').uri).to.eql('/yolo/oppai/route2')
 
                 s.get('/route1', () => 'this is route1 with prefix').prefix('somewhere').where('a', 'b').middleware(()=>'goonga hai kya')
 
@@ -74,6 +75,7 @@ describe("Routing", () => {
         s.group({ prefix: 'filewala'}, 'testroutefile')
         s.refresh()
         expect(s.getRouteByName('fileone').uri).to.eql('/filewala/file1')
+        expect(s.getRouteByName('filegroup2').uri).to.eql('/filewala/filegroup/filegroup1')
 
         s.flush()
 
@@ -98,7 +100,7 @@ describe("Routing", () => {
         
         expect(() => {
             dispatcher.load().next()
-        }).to.throw("Invalid route action [DumbControllerRoute] for route [/filewala/cont]")
+        }).to.throw("Invalid route action [DumbControllerRoute] for route [/cont]")
 
         s.flush()
         

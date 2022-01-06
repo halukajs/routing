@@ -59,7 +59,6 @@ export default class Router {
 		this.#groupStack.push(attributes)
 		this.loadRoutes(routes)
 		this.#groupStack.pop()
-
 	}
 
 	public flush (): void {
@@ -69,13 +68,16 @@ export default class Router {
 	protected loadRoutes (routes: Action) {
 		if (routes instanceof Function) {
 			routes(this)
+			// this.#groupStack.pop()
 		}else if (typeof(routes) === 'string') {
 			const _routes = routes as string
 			// eslint-disable-next-line
 			const route = require(path.join(this.#opts.path, _routes)).Route as Router
 
 			if (route == undefined) throw new Error(`Route file needs to export a valid Router. '${typeof(route)}' exported.`)
+
 			this.#routes.getRoutes().push(...route.#routes.getRoutes().map(x => this.mergeGroupAttributes(x)))
+
 		}else {
 			this.#groupStack.pop()
 			throw new TypeError('Invalid Group Action provided. Exprected "string" or "function".')
@@ -95,10 +97,11 @@ export default class Router {
 
 	private mergeGroupAttributes (route: Route): Route {
 		let prefix = route.attribs.prefix || ''
-		this.#groupStack.reverse().forEach(lastGroup => {
-			prefix = `${_.trim(lastGroup['prefix'], '/')}/${prefix}`
+		this.#groupStack.slice(0).reverse().forEach(lastGroup => {
+			prefix = `${_.trimStart(lastGroup['prefix'], '/')}/${prefix}`
 		})
-		return route.prefix(prefix)
+		route.attribs.prefix = _.trim(prefix, '/')
+		return route
 	}
 
 	public get routes (): Route[] {
