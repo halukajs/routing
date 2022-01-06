@@ -63,6 +63,7 @@ class Router {
     loadRoutes(routes) {
         if (routes instanceof Function) {
             routes(this);
+            // this.#groupStack.pop()
         }
         else if (typeof (routes) === 'string') {
             const _routes = routes;
@@ -87,10 +88,11 @@ class Router {
     }
     mergeGroupAttributes(route) {
         let prefix = route.attribs.prefix || '';
-        __classPrivateFieldGet(this, _Router_groupStack, "f").reverse().forEach(lastGroup => {
-            prefix = `${_.trim(lastGroup['prefix'], '/')}/${prefix}`;
+        __classPrivateFieldGet(this, _Router_groupStack, "f").slice(0).reverse().forEach(lastGroup => {
+            prefix = `${_.trimStart(lastGroup['prefix'], '/')}/${prefix}`;
         });
-        return route.prefix(prefix);
+        route.attribs.prefix = _.trim(prefix, '/');
+        return route;
     }
     get routes() {
         return __classPrivateFieldGet(this, _Router_routes, "f").getRoutes();
