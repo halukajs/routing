@@ -74,7 +74,8 @@ export default class Router {
 			// eslint-disable-next-line
 			const route = require(path.join(this.#opts.path, _routes)).Route as Router
 
-			if (route == undefined) throw new Error(`Route file needs to export a valid Router. '${typeof(route)}' exported.`)
+			// if (route == undefined) // either a broken route file or a singleton router
+			//throw new Error(`Route file needs to export a valid Router. '${typeof(route)}' exported.`)
 
 			this.#routes.getRoutes().push(...route.#routes.getRoutes().map(x => this.mergeGroupAttributes(x)))
 
