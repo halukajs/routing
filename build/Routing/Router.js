@@ -69,8 +69,8 @@ class Router {
             const _routes = routes;
             // eslint-disable-next-line
             const route = require(path.join(__classPrivateFieldGet(this, _Router_opts, "f").path, _routes)).Route;
-            if (route == undefined)
-                throw new Error(`Route file needs to export a valid Router. '${typeof (route)}' exported.`);
+            // if (route == undefined) // either a broken route file or a singleton router
+            //throw new Error(`Route file needs to export a valid Router. '${typeof(route)}' exported.`)
             __classPrivateFieldGet(this, _Router_routes, "f").getRoutes().push(...__classPrivateFieldGet(route, _Router_routes, "f").getRoutes().map(x => this.mergeGroupAttributes(x)));
         }
         else {
