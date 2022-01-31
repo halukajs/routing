@@ -9,33 +9,33 @@ import Route from './Route'
 
 export default class RouteCollection {
 
-	#routes: Route[] = []
-	#namedRoutes: Route[] = []
+	private _routes: Route[] = []
+	private _namedRoutes: Route[] = []
 
 	add (route: Route) {
-		this.#routes.push(route)
+		this._routes.push(route)
 		return route
 	}
 
 	clear () {
-		this.#routes = []
-		this.#namedRoutes = []
+		this._routes = []
+		this._namedRoutes = []
 	}
 
 	getByName (name: string) {
-		return this.#namedRoutes[name]
+		return this._namedRoutes[name]
 	}
 
 	getRoutes () {
-		return this.#routes
+		return this._routes
 	}
 
 	refreshNames () {
-		this.#namedRoutes = []
+		this._namedRoutes = []
 
-		this.#routes.forEach(x => {
+		this._routes.forEach(x => {
 			if (x.getName()) 
-				this.#namedRoutes[x.getName()] = x
+				this._namedRoutes[x.getName()] = x
 		})
 	}
 

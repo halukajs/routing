@@ -4,8 +4,8 @@
  */
 import { Action, KeyValue, METHOD, MiddlewareType, RouteAttributes } from './RoutingEssentials';
 export default class Route {
-    #private;
     methods: METHOD[];
+    private _uri;
     action: Action;
     attribs: RouteAttributes;
     middlewares: MiddlewareType[];

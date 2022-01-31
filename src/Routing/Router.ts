@@ -13,13 +13,13 @@ import Route from './Route'
 
 export default class Router {
 
-	#opts: RouterOptions = { path: '',  }
-	#routes: RouteCollection = new RouteCollection()
-	#groupStack: RouteAttributes[] = []
+	private opts: RouterOptions = { path: '',  }
+	private _routes: RouteCollection = new RouteCollection()
+	private groupStack: RouteAttributes[] = []
 
 	constructor (options?: RouterOptions) {
 		if (options)
-			this.#opts = options
+			this.opts = options
 	}
 
 	public get (uri: string, action: Action) {
@@ -51,18 +51,18 @@ export default class Router {
 	}
 
 	public route (methods: METHOD | METHOD[], uri: string, action: Action) {
-		return this.#routes.add(this.createRoute(methods, uri, action))
+		return this._routes.add(this.createRoute(methods, uri, action))
 	}
 
 	public group (attributes: RouteAttributes, routes: Action): void {
 
-		this.#groupStack.push(attributes)
+		this.groupStack.push(attributes)
 		this.loadRoutes(routes)
-		this.#groupStack.pop()
+		this.groupStack.pop()
 	}
 
 	public flush (): void {
-		this.#routes.clear()
+		this._routes.clear()
 	}
 
 	protected loadRoutes (routes: Action) {
@@ -72,15 +72,15 @@ export default class Router {
 		}else if (typeof(routes) === 'string') {
 			const _routes = routes as string
 			// eslint-disable-next-line
-			const route = require(path.join(this.#opts.path, _routes)).Route as Router
+			const route = require(path.join(this.opts.path, _routes)).Route as Router
 
 			// if (route == undefined) // either a broken route file or a singleton router
 			//throw new Error(`Route file needs to export a valid Router. '${typeof(route)}' exported.`)
 
-			this.#routes.getRoutes().push(...route.#routes.getRoutes().map(x => this.mergeGroupAttributes(x)))
+			this._routes.getRoutes().push(...route._routes.getRoutes().map(x => this.mergeGroupAttributes(x)))
 
 		}else {
-			this.#groupStack.pop()
+			this.groupStack.pop()
 			throw new TypeError('Invalid Group Action provided. Exprected "string" or "function".')
 		}
 	}
@@ -89,7 +89,7 @@ export default class Router {
 		methods = <METHOD[]>(typeof (methods) === 'string' ? [methods] : methods)
 		const route = new Route(methods, uri, action)
 
-		if (this.#groupStack.length > 0) {
+		if (this.groupStack.length > 0) {
 			this.mergeGroupAttributes(route)
 		}
 
@@ -98,7 +98,7 @@ export default class Router {
 
 	private mergeGroupAttributes (route: Route): Route {
 		let prefix = route.attribs.prefix || ''
-		this.#groupStack.slice(0).reverse().forEach(lastGroup => {
+		this.groupStack.slice(0).reverse().forEach(lastGroup => {
 			prefix = `${_.trimStart(lastGroup['prefix'], '/')}/${prefix}`
 		})
 		route.attribs.prefix = _.trim(prefix, '/')
@@ -106,14 +106,14 @@ export default class Router {
 	}
 
 	public get routes (): Route[] {
-		return this.#routes.getRoutes()
+		return this._routes.getRoutes()
 	}
 
 	public getRouteByName (name: string): Route {
-		return this.#routes.getByName(name)
+		return this._routes.getByName(name)
 	}
 
 	public refresh (): void {
-		this.#routes.refreshNames()
+		this._routes.refreshNames()
 	}
 }

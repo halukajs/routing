@@ -12,14 +12,14 @@ import _ = require('lodash')
 export default class Route {
 
 	methods: METHOD[]
-	#uri: string
+	private _uri: string
 	action: Action
 	attribs: RouteAttributes
 	middlewares: MiddlewareType[] = []
 
 	constructor (methods: METHOD[], uri: string, action: Action) {
 		this.methods = methods
-		this.#uri = uri
+		this._uri = uri
 		this.action = action
 		this.attribs = { prefix: ''}
 	}
@@ -47,7 +47,7 @@ export default class Route {
 	}
 
 	public get uri () {
-		return '/' + _.trim(`${this.attribs.prefix}/${_.trimStart(this.#uri, '/')}`, '/')
+		return '/' + _.trim(`${this.attribs.prefix}/${_.trimStart(this._uri, '/')}`, '/')
 	}
 
 	public middleware (...middleware: MiddlewareType[]): this {

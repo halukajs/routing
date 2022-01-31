@@ -1,16 +1,4 @@
 'use strict';
-var __classPrivateFieldSet = (this && this.__classPrivateFieldSet) || function (receiver, state, value, kind, f) {
-    if (kind === "m") throw new TypeError("Private method is not writable");
-    if (kind === "a" && !f) throw new TypeError("Private accessor was defined without a setter");
-    if (typeof state === "function" ? receiver !== state || !f : !state.has(receiver)) throw new TypeError("Cannot write private member to an object whose class did not declare it");
-    return (kind === "a" ? f.call(receiver, value) : f ? f.value = value : state.set(receiver, value)), value;
-};
-var __classPrivateFieldGet = (this && this.__classPrivateFieldGet) || function (receiver, state, kind, f) {
-    if (kind === "a" && !f) throw new TypeError("Private accessor was defined without a getter");
-    if (typeof state === "function" ? receiver !== state || !f : !state.has(receiver)) throw new TypeError("Cannot read private member from an object whose class did not declare it");
-    return kind === "m" ? f : kind === "a" ? f.call(receiver) : f ? f.value : state.get(receiver);
-};
-var _Router_opts, _Router_routes, _Router_groupStack;
 Object.defineProperty(exports, "__esModule", { value: true });
 /**
  * @name Router
@@ -22,11 +10,11 @@ const RouteCollection_1 = require("./RouteCollection");
 const Route_1 = require("./Route");
 class Router {
     constructor(options) {
-        _Router_opts.set(this, { path: '', });
-        _Router_routes.set(this, new RouteCollection_1.default());
-        _Router_groupStack.set(this, []);
+        this.opts = { path: '', };
+        this._routes = new RouteCollection_1.default();
+        this.groupStack = [];
         if (options)
-            __classPrivateFieldSet(this, _Router_opts, options, "f");
+            this.opts = options;
     }
     get(uri, action) {
         return this.route('GET', uri, action);
@@ -50,15 +38,15 @@ class Router {
         return this.route(['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'], uri, action);
     }
     route(methods, uri, action) {
-        return __classPrivateFieldGet(this, _Router_routes, "f").add(this.createRoute(methods, uri, action));
+        return this._routes.add(this.createRoute(methods, uri, action));
     }
     group(attributes, routes) {
-        __classPrivateFieldGet(this, _Router_groupStack, "f").push(attributes);
+        this.groupStack.push(attributes);
         this.loadRoutes(routes);
-        __classPrivateFieldGet(this, _Router_groupStack, "f").pop();
+        this.groupStack.pop();
     }
     flush() {
-        __classPrivateFieldGet(this, _Router_routes, "f").clear();
+        this._routes.clear();
     }
     loadRoutes(routes) {
         if (routes instanceof Function) {
@@ -68,42 +56,41 @@ class Router {
         else if (typeof (routes) === 'string') {
             const _routes = routes;
             // eslint-disable-next-line
-            const route = require(path.join(__classPrivateFieldGet(this, _Router_opts, "f").path, _routes)).Route;
+            const route = require(path.join(this.opts.path, _routes)).Route;
             // if (route == undefined) // either a broken route file or a singleton router
             //throw new Error(`Route file needs to export a valid Router. '${typeof(route)}' exported.`)
-            __classPrivateFieldGet(this, _Router_routes, "f").getRoutes().push(...__classPrivateFieldGet(route, _Router_routes, "f").getRoutes().map(x => this.mergeGroupAttributes(x)));
+            this._routes.getRoutes().push(...route._routes.getRoutes().map(x => this.mergeGroupAttributes(x)));
         }
         else {
-            __classPrivateFieldGet(this, _Router_groupStack, "f").pop();
+            this.groupStack.pop();
             throw new TypeError('Invalid Group Action provided. Exprected "string" or "function".');
         }
     }
     createRoute(methods, uri, action) {
         methods = (typeof (methods) === 'string' ? [methods] : methods);
         const route = new Route_1.default(methods, uri, action);
-        if (__classPrivateFieldGet(this, _Router_groupStack, "f").length > 0) {
+        if (this.groupStack.length > 0) {
             this.mergeGroupAttributes(route);
         }
         return route;
     }
     mergeGroupAttributes(route) {
         let prefix = route.attribs.prefix || '';
-        __classPrivateFieldGet(this, _Router_groupStack, "f").slice(0).reverse().forEach(lastGroup => {
+        this.groupStack.slice(0).reverse().forEach(lastGroup => {
             prefix = `${_.trimStart(lastGroup['prefix'], '/')}/${prefix}`;
         });
         route.attribs.prefix = _.trim(prefix, '/');
         return route;
     }
     get routes() {
-        return __classPrivateFieldGet(this, _Router_routes, "f").getRoutes();
+        return this._routes.getRoutes();
     }
     getRouteByName(name) {
-        return __classPrivateFieldGet(this, _Router_routes, "f").getByName(name);
+        return this._routes.getByName(name);
     }
     refresh() {
-        __classPrivateFieldGet(this, _Router_routes, "f").refreshNames();
+        this._routes.refreshNames();
     }
 }
 exports.default = Router;
-_Router_opts = new WeakMap(), _Router_routes = new WeakMap(), _Router_groupStack = new WeakMap();
 //# sourceMappingURL=Router.js.map

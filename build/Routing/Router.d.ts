@@ -1,7 +1,9 @@
 import { Action, METHOD, RouteAttributes, RouterOptions } from './RoutingEssentials';
 import Route from './Route';
 export default class Router {
-    #private;
+    private opts;
+    private _routes;
+    private groupStack;
     constructor(options?: RouterOptions);
     get(uri: string, action: Action): Route;
     post(uri: string, action: Action): Route;
