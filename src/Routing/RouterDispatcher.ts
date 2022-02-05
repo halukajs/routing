@@ -31,14 +31,14 @@ export default class RouterDispatcher<T> {
 	}
 
 	/* istanbul ignore next */     
-	dispatch (_instance: T): T {
+	dispatch (_instance: T, timeout?: Number): T {
 		throw new TypeError('dispatch() not implemented.')
 	}
     
 	/* istanbul ignore next */ 
-	createAndDispatch (): T {
+	createAndDispatch (timeout?: Number): T {
 		const app = this.create()
-		return this.dispatch(app)
+		return this.dispatch(app, timeout)
 	}
 }
 
