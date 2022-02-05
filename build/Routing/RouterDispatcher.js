@@ -20,13 +20,13 @@ class RouterDispatcher {
         throw new TypeError('create() not implemented.');
     }
     /* istanbul ignore next */
-    dispatch(_instance) {
+    dispatch(_instance, timeout) {
         throw new TypeError('dispatch() not implemented.');
     }
     /* istanbul ignore next */
-    createAndDispatch() {
+    createAndDispatch(timeout) {
         const app = this.create();
-        return this.dispatch(app);
+        return this.dispatch(app, timeout);
     }
 }
 exports.default = RouterDispatcher;

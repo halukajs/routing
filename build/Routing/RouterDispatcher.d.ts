@@ -11,6 +11,6 @@ export default class RouterDispatcher<T> {
     constructor(router: Router, opts: DispatcherOptions);
     load(): Generator<CompiledRoute, void, unknown>;
     create(): T;
-    dispatch(_instance: T): T;
-    createAndDispatch(): T;
+    dispatch(_instance: T, timeout?: Number): T;
+    createAndDispatch(timeout?: Number): T;
 }
